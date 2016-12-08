@@ -40,3 +40,4 @@ mysqli_close($link);
 
 // This should be the last line
 $app->run(); // Start the application, i.e. handle the request
+
