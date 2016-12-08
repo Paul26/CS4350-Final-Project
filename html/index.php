@@ -1,6 +1,3 @@
-
-
-
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +46,4 @@ $conn->close();
 
 // This should be the last line
 $app->run(); // Start the application, i.e. handle the request
-
-
-
 
