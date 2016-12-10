@@ -1,5 +1,5 @@
 $(window).load(function(){
-	$.getJSON( "blog.php/latest")
+	$.getJSON( "blog.php/blog/latest")
 	  .done( function( data ) {
 		var title = data[0].title;
 		var body  = data[0].body;
