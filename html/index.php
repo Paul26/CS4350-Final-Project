@@ -12,10 +12,10 @@ $app = new Silex\Application(); // Create the Silex application, in which all co
 // We will later add the configuration, etc. here
 $app['debug'] = true;
 
-//  DB Connection 
+//  DB Connection
 $servername = "107.170.222.199";
-$username = "paulsheets";
-$password = "1234pass";
+$username   = "paulsheets";
+$password   = "1234pass";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=final", $username, $password);
@@ -46,4 +46,3 @@ $conn->close();
 
 // This should be the last line
 $app->run(); // Start the application, i.e. handle the request
-
