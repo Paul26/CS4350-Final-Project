@@ -28,12 +28,21 @@ catch(PDOException $e)
     echo "Connection failed: " . $e->getMessage();
     }
 
-
-
-
-
-$app->get('/blog', function (Silex\Application $app) {
-
+$app->get('/blog/latest', function (Silex\Application $app) {
+	$response = new Response();
+	try {
+		$query = $conn->prepare("SELECT title, body, author, createDate FROM paulsheets_blog ORDER BY createdDate DESC LIMIT 1;");
+		$query->execute();
+		$result = $query->setFetchMode(PDO::FETCH_ASSOC);
+		$response->setStatusCode(200);
+		$response->setContent(json_encode($result));
+		return $response;
+	}
+	catch(PDOException $e) {
+		$response->setStatusCode(500);
+		$response->setContent(json_encode("Error: " . $e));
+		return $response;
+	}
 });
 
 $app->get('/blog/{id}', function (Silex\Application $app, $id) {
