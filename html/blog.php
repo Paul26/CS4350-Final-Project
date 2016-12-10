@@ -30,12 +30,12 @@ catch(PDOException $e)
 	return $response;
     }
 
-$app->get('/blog/latest', function (Silex\Application $app) {
+$app->get('/blog/latest', function (Silex\Application $app) use($conn) {
 	$response = new Response();
 	try {
-		$query = $conn->prepare("SELECT title, body, author, createDate FROM paulsheets_blog ORDER BY createdDate DESC LIMIT 1;");
+		$query = $conn->prepare("SELECT title, body, author, createdDate FROM paulsheets_blog ORDER BY createdDate DESC LIMIT 1;");
 		$query->execute();
-		$result = $query->setFetchMode(PDO::FETCH_ASSOC);
+		$result = $query->fetch(PDO::FETCH_ASSOC);
 		$response->setStatusCode(200);
 		$response->setContent(json_encode($result));
 		$query = null;
