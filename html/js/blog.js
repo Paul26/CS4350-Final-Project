@@ -1,4 +1,4 @@
-$(document).on("pageload",function(){
+$(window).load(function(){
 	$.get( "blog.php/latest" )
 	  .done( function( data ) {
 		var title = data[0].title;
