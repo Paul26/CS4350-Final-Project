@@ -38,6 +38,7 @@ $app->get('/blog/latest', function (Silex\Application $app) {
 		$result = $query->setFetchMode(PDO::FETCH_ASSOC);
 		$response->setStatusCode(200);
 		$response->setContent(json_encode($result));
+		$query = null;
 		return $response;
 	}
 	catch(PDOException $e) {
@@ -53,7 +54,7 @@ $app->get('/blog/{id}', function (Silex\Application $app, $id) {
 
 
 // Close DB Connection
-$conn->close();
+$conn = null;
 
 // This should be the last line
 $app->run(); // Start the application, i.e. handle the request
