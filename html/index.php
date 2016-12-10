@@ -12,18 +12,24 @@ $app = new Silex\Application(); // Create the Silex application, in which all co
 // We will later add the configuration, etc. here
 $app['debug'] = true;
 
-//  DB Connection 
-$link = mysqli_connect("107.170.222.199", "donstringham", "1234pass", "final");
- 
-if (!$link) {
-    echo "Error: Unable to connect to MySQL." . PHP_EOL;
-    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-    exit;
-}
- 
-echo "Success: A proper connection to MySQL was made! The database is great." . PHP_EOL;
-echo "Host information: " . mysqli_get_host_info($link) . PHP_EOL;
+//  DB Connection
+$servername = "107.170.222.199";
+$username = "paulsheets";
+$password = "1234pass";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=final", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "Connected successfully";
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+
+
+
 
 
 $app->get('/blog', function (Silex\Application $app) {
@@ -35,9 +41,8 @@ $app->get('/blog/{id}', function (Silex\Application $app, $id) {
 });
 
 
-
-mysqli_close($link);
+// Close DB Connection
+$conn->close();
 
 // This should be the last line
 $app->run(); // Start the application, i.e. handle the request
-
