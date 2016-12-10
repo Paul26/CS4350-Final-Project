@@ -14,14 +14,14 @@ $app['debug'] = true;
 
 //  DB Connection
 $servername = "107.170.222.199";
-$username = "paulsheets";
-$password = "1234pass";
+$username   = "paulsheets";
+$password   = "1234pass";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=final", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connected successfully";
+    echo "Connected successfully"; 
     }
 catch(PDOException $e)
     {
