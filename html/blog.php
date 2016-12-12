@@ -54,12 +54,13 @@ $app->get('/blog/{id}', function (Silex\Application $app, $id) {
 
 $app->post('/blog/create', function (Request $request) use($app, $conn) {
         $response = new Response();
+	$data = json_decode($request->getContent(), true);
         try {
                 // It's just easier to deal with the data this way.
                 $post = array(
-                    'title' => $request->request->get('title'),
-                    'body' => $request->request->get('body'),
-                    'author' => $request->request->get('author')
+                    'title' => $data['title'],
+                    'body' => $data['body'],
+                    'author' => $data['author']
                 );
                 $query = $conn->prepare(
                     'INSERT INTO paulsheets_blog (title, body, author, createdDate) VALUES("'.$post['title'].'", "'.$post['body'].'", "'.$post['author'].'", NOW());'
