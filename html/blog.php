@@ -24,38 +24,60 @@ try {
     }
 catch(PDOException $e)
     {
-	$response = new Response();
-	$response->setStatusCode(500);
-	$response->setContent(json_encode("Error: " . $e));
-	return $response;
+        $response = new Response();
+        $response->setStatusCode(500);
+        $response->setContent(json_encode("Error: " . $e));
+        return $response;
     }
 
 $app->get('/blog/latest', function (Silex\Application $app) use($conn) {
-	$response = new Response();
-	try {
-		$query = $conn->prepare("SELECT title, body, author, createdDate FROM paulsheets_blog ORDER BY createdDate DESC LIMIT 1;");
-		$query->execute();
-		$result = $query->fetch(PDO::FETCH_ASSOC);
-		$response->setStatusCode(200);
-		$response->setContent(json_encode($result));
-		$query = null;
-		return $response;
-	}
-	catch(PDOException $e) {
-		$response->setStatusCode(500);
-		$response->setContent(json_encode("Error: " . $e));
-		return $response;
-	}
+        $response = new Response();
+        try {
+                $query = $conn->prepare("SELECT title, body, author, createdDate FROM paulsheets_blog ORDER BY createdDate DESC LIMIT 1;");
+                $query->execute();
+                $result = $query->fetch(PDO::FETCH_ASSOC);
+                $response->setStatusCode(200);
+                $response->setContent(json_encode($result));
+                $query = null;
+                return $response;
+        }
+        catch(PDOException $e) {
+                $response->setStatusCode(500);
+                $response->setContent(json_encode("Error: " . $e));
+                return $response;
+        }
 });
 
 $app->get('/blog/{id}', function (Silex\Application $app, $id) {
 
 });
 
-// Create - POST
-// Update - PUT
-// Delete - DELETE
-
+$app->post('/blog/create', function (Request $request) use($app, $conn) {
+        $response = new Response();
+	$data = json_decode($request->getContent(), true);
+        try {
+                // It's just easier to deal with the data this way.
+                $post = array(
+                    'title' => $data['title'],
+                    'body' => $data['body'],
+                    'author' => $data['author']
+                );
+                $query = $conn->prepare(
+                    'INSERT INTO paulsheets_blog (title, body, author, createdDate) VALUES("'.$post['title'].'", "'.$post['body'].'", "'.$post['author'].'", NOW());'
+                );
+                $query->execute();
+                $query = null;
+                $rdate = array('date' => date('m-d-Y h:i:sa'));
+                $response->setStatusCode(201);
+                $response->setContent(json_encode($rdate));
+                return $response;
+        }       
+        catch(PDOException $e) {
+                $response->setStatusCode(500);
+                $response->setContent(json_encode("Error: " . $e));
+                return $response;           
+        }
+});
 
 // Close DB Connection
 $conn = null;
