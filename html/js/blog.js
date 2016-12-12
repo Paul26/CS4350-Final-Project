@@ -41,7 +41,7 @@ $(window).load(function(){
 				var cdate = $.parseJSON(data);
                                 $("#blog-title").replaceWith("<h1 id='blog-title'>" + title + "</h1>");
                                 $("#blog-author").replaceWith("<a id='blog-author' href='#''>" + author + "</a>");
-                                $("#blog-body").replaceWith("<p id='blog-body' class='lead'>" + body + "</p>");
+                                $("#blog-body").replaceWith("<p id='blog-body' class='lead' style='word-wrap: break-word;'>" + body + "</p>");
                                 $("#blog-created-date").replaceWith(
                                     "<p id='blog-created-date'><span class='glyphicon glyphicon-time'></span> " + cdate["date"] + "</p>"
                                 );
