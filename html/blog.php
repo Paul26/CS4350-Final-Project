@@ -52,6 +52,10 @@ $app->get('/blog/{id}', function (Silex\Application $app, $id) {
 
 });
 
+// Create - POST
+// Update - PUT
+// Delete - DELETE
+
 
 // Close DB Connection
 $conn = null;
