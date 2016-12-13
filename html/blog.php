@@ -79,6 +79,31 @@ $app->post('/blog/create', function (Request $request) use($app, $conn) {
         }
 });
 
+$app->post('/blog/search', function (Request $request) use($app, $conn) {
+	$response = new Response();
+	$data = json_decode($request->getContent(), true);
+	try {
+		$query = $conn->prepare('SELECT title, body, author, createdDate FROM paulsheets_blog WHERE title="'.$data.'" OR author="'.$data.'" ORDER BY createdDate DESC LIMIT 1;');
+		$query->execute();
+		$result = $query->fetch(PDO::FETCH_ASSOC);
+		$query = null;
+		if($result == false) {
+			$err = array('error' => 'No matching blog found.');
+			$response->setStatusCode(400);
+                        $response->setContent(json_encode($err));
+                        return $response;
+		}
+		$response->setStatusCode(200);
+                $response->setContent(json_encode($result));
+                return $response;
+	}
+	catch(PDOException $e) {
+                $response->setStatusCode(500);
+                $response->setContent(json_encode("Error: " . $e));
+                return $response;
+	}
+});
+
 // Close DB Connection
 $conn = null;
 

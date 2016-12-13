@@ -58,4 +58,45 @@ $(window).load(function(){
             // temporarily so we can put it back after a
             // successful submit to the database.
         });
+
+	$("#search-btn").click(function() {
+		var search_term = JSON.stringify($("#search-query").val());
+		$("#search-query").val("");
+		$.post("blog.php/blog/search", search_term)
+		    .done(function( data ) {
+			var rdata = $.parseJSON(data);
+			var author = rdata["author"];
+			var title = rdata["title"];
+			var body = rdata["body"];
+			var cdate = rdata["date"];
+
+			$("#blog-title").replaceWith("<h1 id='blog-title'>" + title + "</h1>");
+                        $("#blog-author").replaceWith("<a id='blog-author' href='#''>" + author + "</a>");
+                        $("#blog-body").replaceWith("<p id='blog-body' class='lead' style='word-wrap: break-word;'>" + body + "</p>");
+                        $("#blog-created-date").replaceWith(
+                            "<p id='blog-created-date'><span class='glyphicon glyphicon-time'></span> " + cdate["date"] + "</p>"
+                        );
+		    })
+		    .fail(function( data ) {
+			var fdata = $.parseJSON(data.responseText);
+			var html = `
+				<div id="blog-search" class="well">
+				    <h4>Blog Search</h4>
+					    <div class="input-group">
+					        <input id="search-query" type="text" class="form-control">
+						        <span class="input-group-btn">
+						            <button id="search-btn" class="btn btn-default" type="button">
+						                <span class="glyphicon glyphicon-search"></span>
+			        			    </button>
+						        </span>
+					    </div>
+				</div>
+				<p id='search-error' style='color: #B22222; font-size: 20px;'>` + fdata["error"] + `</p>
+			`;
+			$("#blog-search").replaceWith(html);
+			setTimeout(function() {
+			    $("#search-error").remove();
+			}, 5000);
+		    });
+	});
 });
