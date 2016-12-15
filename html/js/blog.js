@@ -59,7 +59,7 @@ $(window).load(function(){
             // successful submit to the database.
         });
 
-        $("#search-btn").click(function() {
+        $(document).on('click', '#search-btn', function() {
                 var search_term = JSON.stringify($("#search-query").val());
                 $("#search-query").val("");
                 $.post("blog.php/blog/search", search_term)
